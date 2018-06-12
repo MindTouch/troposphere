@@ -212,20 +212,3 @@ class StreamingDistribution(AWSObject):
         'StreamingDistributionConfig': (StreamingDistributionConfig, True,),
         'Tags': ((Tags, list), False),
     }
-
-
-class CloudFrontOriginAccessIdentityConfig(AWSProperty):
-    props = {
-        'Comment': (basestring, True),
-    }
-
-
-class CloudFrontOriginAccessIdentity(AWSObject):
-    resource_type = "AWS::CloudFront::CloudFrontOriginAccessIdentity"
-
-    props = {
-        'CloudFrontOriginAccessIdentityConfig': (
-            CloudFrontOriginAccessIdentityConfig,
-            True,
-        ),
-    }
