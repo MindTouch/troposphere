@@ -13,7 +13,7 @@ import types
 
 from . import validators
 
-__version__ = "2.3.0"
+__version__ = "2.3.1"
 
 # constants for DeletionPolicy
 Delete = 'Delete'
@@ -125,6 +125,9 @@ class BaseAWSObject(object):
         for k, v in kwargs.items():
             self.__setattr__(k, v)
 
+        self.add_to_template()
+
+    def add_to_template(self):
         # Bound it to template if we know it
         if self.template is not None:
             self.template.add_resource(self)
@@ -576,6 +579,7 @@ class Template(object):
 
     def add_condition(self, name, condition):
         self.conditions[name] = condition
+        return name
 
     def handle_duplicate_key(self, key):
         raise ValueError('duplicate key "%s" detected' % key)
@@ -652,6 +656,18 @@ class Template(object):
         return cfn_flip.to_yaml(self.to_json(), clean_up=clean_up,
                                 long_form=long_form)
 
+    def __eq__(self, other):
+        if isinstance(other, Template):
+            return (self.to_json() == other.to_json())
+        else:
+            return False
+
+    def __ne__(self, other):
+        return (not self.__eq__(other))
+
+    def __hash__(self):
+        return hash(self.to_json())
+
 
 class Export(AWSHelperFn):
     def __init__(self, name):
@@ -666,6 +682,11 @@ class Output(AWSDeclaration):
         'Export': (Export, False),
         'Value': (basestring, True),
     }
+
+    def add_to_template(self):
+        # Bound it to template if we know it
+        if self.template is not None:
+            self.template.add_output(self)
 
 
 class Parameter(AWSDeclaration):
@@ -684,6 +705,11 @@ class Parameter(AWSDeclaration):
         'Description': (basestring, False),
         'ConstraintDescription': (basestring, False),
     }
+
+    def add_to_template(self):
+        # Bound it to template if we know it
+        if self.template is not None:
+            self.template.add_parameter(self)
 
     def validate_title(self):
         if len(self.title) > PARAMETER_TITLE_MAX:
