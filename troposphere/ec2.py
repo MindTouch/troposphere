@@ -147,7 +147,7 @@ class Placement(AWSProperty):
 
 class CreditSpecification(AWSProperty):
     props = {
-        'CpuCredits': (basestring, False),
+        'CPUCredits': (basestring, False),
     }
 
 
