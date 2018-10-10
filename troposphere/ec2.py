@@ -233,7 +233,7 @@ class Instance(AWSObject):
         'ElasticGpuSpecifications': ([ElasticGpuSpecification], False),
         'HostId': (basestring, False),
         'IamInstanceProfile': (basestring, False),
-        'ImageId': (basestring, True),
+        'ImageId': (basestring, False),
         'InstanceInitiatedShutdownBehavior': (basestring, False),
         'InstanceType': (basestring, False),
         'Ipv6AddressCount': (integer, False),
@@ -612,6 +612,15 @@ class VPCEndpointService(AWSObject):
     }
 
 
+class VPCEndpointServicePermissions(AWSObject):
+    resource_type = "AWS::EC2::VPCEndpointServicePermissions"
+
+    props = {
+        'AllowedPrincipals': ([basestring], False),
+        'ServiceId': (basestring, True),
+    }
+
+
 class VPCGatewayAttachment(AWSObject):
     resource_type = "AWS::EC2::VPCGatewayAttachment"
 
@@ -679,6 +688,7 @@ class VPCPeeringConnection(AWSObject):
         'PeerVpcId': (basestring, True),
         'VpcId': (basestring, True),
         'Tags': ((Tags, list), False),
+        'PeerRegion': (basestring, False),
         'PeerOwnerId': (basestring, False),
         'PeerRoleArn': (basestring, False),
     }

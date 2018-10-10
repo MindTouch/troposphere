@@ -13,7 +13,7 @@ import types
 
 from . import validators
 
-__version__ = "2.3.1"
+__version__ = "2.3.3"
 
 # constants for DeletionPolicy
 Delete = 'Delete'
@@ -610,6 +610,13 @@ class Template(object):
         if len(self.parameters) >= MAX_PARAMETERS:
             raise ValueError('Maximum parameters %d reached' % MAX_PARAMETERS)
         return self._update(self.parameters, parameter)
+
+    def get_or_add_parameter(self, parameter):
+        if parameter.title in self.parameters:
+            return self.parameters[parameter.title]
+        else:
+            self.add_parameter(parameter)
+        return parameter
 
     def add_resource(self, resource):
         if len(self.resources) >= MAX_RESOURCES:

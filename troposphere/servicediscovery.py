@@ -45,7 +45,7 @@ class HealthCheckConfig(AWSProperty):
 
 class HealthCheckCustomConfig(AWSProperty):
     props = {
-        'FailureThreshold': (float, False),
+        'FailureThreshold': (float, True)
     }
 
 
