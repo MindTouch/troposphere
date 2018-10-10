@@ -49,7 +49,6 @@ class HealthCheckCustomConfig(AWSProperty):
     }
 
 
-
 class DnsRecord(AWSProperty):
     props = {
         'TTL': (basestring, True),
