@@ -49,6 +49,14 @@ def placement_constraint_validator(x):
     return x
 
 
+def scope_validator(x):
+    valid_values = ['shared', 'task']
+    if x not in valid_values:
+        raise ValueError("Scope type must be one of: %s" %
+                         ', '.join(valid_values))
+    return x
+
+
 class PlacementConstraint(AWSProperty):
     props = {
         'Type': (placement_constraint_validator, True),
@@ -87,6 +95,8 @@ def launch_type_validator(x):
 
 class ServiceRegistry(AWSProperty):
     props = {
+        'ContainerName': (basestring, False),
+        'ContainerPort': (integer, False),
         'Port': (integer, False),
         'RegistryArn': (basestring, False),
         'ContainerName': (basestring, False),
@@ -193,6 +203,12 @@ class LogConfiguration(AWSProperty):
     }
 
 
+class RepositoryCredentials(AWSProperty):
+    props = {
+        'CredentialsParameter': (basestring, False)
+    }
+
+
 class Ulimit(AWSProperty):
     props = {
         'HardLimit': (integer, True),
@@ -227,6 +243,7 @@ class ContainerDefinition(AWSProperty):
         'PortMappings': ([PortMapping], False),
         'Privileged': (boolean, False),
         'ReadonlyRootFilesystem': (boolean, False),
+        'RepositoryCredentials': (RepositoryCredentials, False),
         'Ulimits': ([Ulimit], False),
         'User': (basestring, False),
         'VolumesFrom': ([VolumesFrom], False),
@@ -240,8 +257,19 @@ class Host(AWSProperty):
     }
 
 
+class DockerVolumeConfiguration(AWSProperty):
+    props = {
+        'Autoprovision': (boolean, False),
+        'Driver': (basestring, False),
+        'DriverOpts': ([basestring], False),
+        'Labels': ([basestring], False),
+        'Scope': (scope_validator, False)
+    }
+
+
 class Volume(AWSProperty):
     props = {
+        'DockerVolumeConfiguration': (DockerVolumeConfiguration, False),
         'Name': (basestring, True),
         'Host': (Host, False),
     }

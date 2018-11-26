@@ -13,7 +13,7 @@ import types
 
 from . import validators
 
-__version__ = "2.3.3"
+__version__ = "2.3.4"
 
 # constants for DeletionPolicy
 Delete = 'Delete'
@@ -473,7 +473,10 @@ class Split(AWSHelperFn):
 
 
 class Sub(AWSHelperFn):
-    def __init__(self, input_str, **values):
+    def __init__(self, input_str, dict_values=None, **values):
+        # merge dict
+        if dict_values:
+            values.update(dict_values)
         self.data = {'Fn::Sub': [input_str, values] if values else input_str}
 
 
@@ -654,6 +657,52 @@ class Template(object):
         t['Resources'] = self.resources
 
         return encode_to_dict(t)
+
+    def set_parameter_label(self, parameter, label):
+        """
+        Sets the Label used in the User Interface for the given parameter.
+        :type parameter: str or Parameter
+        :type label: str
+        """
+        labels = self.metadata\
+            .setdefault("AWS::CloudFormation::Interface", {})\
+            .setdefault("ParameterLabels", {})
+
+        if isinstance(parameter, BaseAWSObject):
+            parameter = parameter.title
+
+        labels[parameter] = {"default": label}
+
+    def add_parameter_to_group(self, parameter, group_name):
+        """
+        Add a parameter under a group (created if needed).
+        :type parameter: str or Parameter
+        :type group_name: str
+        """
+        groups = self.metadata \
+            .setdefault("AWS::CloudFormation::Interface", {}) \
+            .setdefault("ParameterGroups", [])
+
+        if isinstance(parameter, BaseAWSObject):
+            parameter = parameter.title
+
+        # Check if group_name already exists
+        existing_group = None
+        for group in groups:
+            if group["Label"]["default"] == group_name:
+                existing_group = group
+                break
+
+        if existing_group is None:
+            existing_group = {
+                "Label": {"default": group_name},
+                "Parameters": [],
+            }
+            groups.append(existing_group)
+
+        existing_group["Parameters"].append(parameter)
+
+        return group_name
 
     def to_json(self, indent=4, sort_keys=True, separators=(',', ': ')):
         return json.dumps(self.to_dict(), indent=indent,

@@ -125,15 +125,18 @@ class Source(AWSProperty):
 
     def validate(self):
         valid_types = [
+            'BITBUCKET',
             'CODECOMMIT',
             'CODEPIPELINE',
             'GITHUB',
             'GITHUB_ENTERPRISE',
+            'NO_SOURCE',
             'S3',
         ]
 
         location_agnostic_types = [
             'CODEPIPELINE',
+            'NO_SOURCE',
         ]
 
         source_type = self.properties.get('Type')
@@ -175,6 +178,44 @@ class ProjectTriggers(AWSProperty):
     }
 
 
+def validate_status(status):
+    """ Validate status
+    :param status: The Status of CloudWatchLogs or S3Logs
+    :return: The provided value if valid
+    """
+    valid_statuses = [
+        'ENABLED',
+        'DISABLED'
+    ]
+
+    if status not in valid_statuses:
+        raise ValueError('Status: must be one of %s' %
+                         ','.join(valid_statuses))
+    return status
+
+
+class CloudWatchLogs(AWSProperty):
+    props = {
+        "Status": (validate_status, True),
+        "GroupName": (basestring, False),
+        "StreamName": (basestring, False)
+    }
+
+
+class S3Logs(AWSProperty):
+    props = {
+        "Status": (validate_status, True),
+        "Location": (basestring, False)
+    }
+
+
+class LogsConfig(AWSProperty):
+    props = {
+        'CloudWatchLogs': (CloudWatchLogs, False),
+        'S3Logs': (S3Logs, False)
+    }
+
+
 class Project(AWSObject):
     resource_type = "AWS::CodeBuild::Project"
 
@@ -185,6 +226,7 @@ class Project(AWSObject):
         'Description': (basestring, False),
         'EncryptionKey': (basestring, False),
         'Environment': (Environment, True),
+        "LogsConfig": (LogsConfig, False),
         'Name': (basestring, True),
         'SecondaryArtifacts': ([Artifacts], False),
         'SecondarySources': ([Source], False),
