@@ -261,8 +261,8 @@ class DockerVolumeConfiguration(AWSProperty):
     props = {
         'Autoprovision': (boolean, False),
         'Driver': (basestring, False),
-        'DriverOpts': ([basestring], False),
-        'Labels': ([basestring], False),
+        'DriverOpts': (dict, False),
+        'Labels': (dict, False),
         'Scope': (scope_validator, False)
     }
 
