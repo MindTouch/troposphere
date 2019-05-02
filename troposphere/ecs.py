@@ -99,8 +99,6 @@ class ServiceRegistry(AWSProperty):
         'ContainerPort': (integer, False),
         'Port': (integer, False),
         'RegistryArn': (basestring, False),
-        'ContainerName': (basestring, False),
-        'ContainerPort': (integer, False),
     }
 
 
