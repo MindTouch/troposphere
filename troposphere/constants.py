@@ -2,12 +2,16 @@
 # Regions
 #
 
+AP_EAST_1 = 'ap-east-1'
 AP_NORTHEAST_1 = 'ap-northeast-1'
 AP_NORTHEAST_2 = 'ap-northeast-2'
+AP_NORTHEAST_3 = 'ap-northeast-3'
 AP_SOUTHEAST_1 = 'ap-southeast-1'
 AP_SOUTHEAST_2 = 'ap-southeast-2'
 AP_SOUTH_1 = 'ap-south-1'
 CA_CENTRAL_1 = 'ca-central-1'
+CN_NORTH_1 = 'cn-north-1'
+CN_NORTHWEST_1 = 'cn-northwest-1'
 EU_WEST_1 = 'eu-west-1'
 EU_WEST_2 = 'eu-west-2'
 EU_WEST_3 = 'eu-west-3'
@@ -16,6 +20,8 @@ EU_NORTH_1 = 'eu-north-1'
 SA_EAST_1 = 'sa-east-1'
 US_EAST_1 = 'us-east-1'
 US_EAST_2 = 'us-east-2'
+US_GOV_EAST_1 = 'us-gov-east-1'
+US_GOV_WEST_1 = 'us-gov-west-1'
 US_WEST_1 = 'us-west-1'
 US_WEST_2 = 'us-west-2'
 
@@ -31,6 +37,8 @@ AP_NORTHEAST_2A = 'ap-northeast-2a'
 AP_NORTHEAST_2B = 'ap-northeast-2b'
 AP_NORTHEAST_2C = 'ap-northeast-2c'
 
+AP_NORTHEAST_3A = 'ap-northeast-3a'
+
 AP_SOUTHEAST_1A = 'ap-southeast-1a'
 AP_SOUTHEAST_1B = 'ap-southeast-1b'
 AP_SOUTHEAST_1C = 'ap-southeast-1c'
@@ -44,6 +52,13 @@ AP_SOUTH_1B = 'ap-south-1b'
 
 CA_CENTRAL_1A = 'ca-central-1a'
 CA_CENTRAL_1B = 'ca-central-1b'
+
+CN_NORTH_1A = 'cn-north-1a'
+CN_NORTH_1B = 'cn-north-1b'
+
+CN_NORTHWEST_1A = 'cn-northwest-1a'
+CN_NORTHWEST_1B = 'cn-northwest-1b'
+CN_NORTHWEST_1C = 'cn-northwest-1c'
 
 EU_WEST_1A = 'eu-west-1a'
 EU_WEST_1B = 'eu-west-1b'
@@ -84,9 +99,18 @@ US_WEST_1A = 'us-west-1a'
 US_WEST_1B = 'us-west-1b'
 US_WEST_1C = 'us-west-1c'
 
+US_GOV_EAST_1A = 'us-gov-east-1a'
+US_GOV_EAST_1B = 'us-gov-east-1b'
+US_GOV_EAST_1C = 'us-gov-east-1c'
+
+US_GOV_WEST_1A = 'us-gov-west-1a'
+US_GOV_WEST_1B = 'us-gov-west-1b'
+US_GOV_WEST_1C = 'us-gov-west-1c'
+
 US_WEST_2A = 'us-west-2a'
 US_WEST_2B = 'us-west-2b'
 US_WEST_2C = 'us-west-2c'
+US_WEST_2D = 'us-west-2d'
 
 #
 # Networking
@@ -131,6 +155,14 @@ T3_LARGE = 't3.large'
 T3_XLARGE = 't3.xlarge'
 T3_2XLARGE = 't3.2xlarge'
 
+T3A_NANO = 't3a.nano'
+T3A_MICRO = 't3a.micro'
+T3A_SMALL = 't3a.small'
+T3A_MEDIUM = 't3a.medium'
+T3A_LARGE = 't3a.large'
+T3A_XLARGE = 't3a.xlarge'
+T3A_2XLARGE = 't3a.2xlarge'
+
 M5_LARGE = 'm5.large'
 M5_XLARGE = 'm5.xlarge'
 M5_2XLARGE = 'm5.2xlarge'
@@ -153,6 +185,13 @@ M5A_2XLARGE = 'm5a.2xlarge'
 M5A_4XLARGE = 'm5a.4xlarge'
 M5A_12XLARGE = 'm5a.12xlarge'
 M5A_24XLARGE = 'm5a.24xlarge'
+
+M5AD_LARGE = 'm5ad.large'
+M5AD_XLARGE = 'm5ad.xlarge'
+M5AD_2XLARGE = 'm5ad.2xlarge'
+M5AD_4XLARGE = 'm5ad.4xlarge'
+M5AD_12XLARGE = 'm5ad.12xlarge'
+M5AD_24XLARGE = 'm5ad.24xlarge'
 
 M4_LARGE = 'm4.large'
 M4_XLARGE = 'm4.xlarge'
@@ -237,6 +276,14 @@ I3_8XLARGE = 'i3.8xlarge'
 I3_16XLARGE = 'i3.16xlarge'
 I3_METAL = 'i3.metal'
 
+I3EN_LARGE = 'i3en.large'
+I3EN_XLARGE = 'i3en.xlarge'
+I3EN_2XLARGE = 'i3en.2xlarge'
+I3EN_3XLARGE = 'i3en.3xlarge'
+I3EN_6XLARGE = 'i3en.6xlarge'
+I3EN_12XLARGE = 'i3en.12xlarge'
+I3EN_24XLARGE = 'i3en.24xlarge'
+
 D2_XLARGE = 'd2.xlarge'
 D2_2XLARGE = 'd2.2xlarge'
 D2_4XLARGE = 'd2.4xlarge'
@@ -315,6 +362,13 @@ R5A_2XLARGE = 'r5a.2xlarge'
 R5A_4XLARGE = 'r5a.4xlarge'
 R5A_12XLARGE = 'r5a.12xlarge'
 R5A_24XLARGE = 'r5a.24xlarge'
+
+R5AD_LARGE = 'r5ad.large'
+R5AD_XLARGE = 'r5ad.xlarge'
+R5AD_2XLARGE = 'r5ad.2xlarge'
+R5AD_4XLARGE = 'r5ad.4xlarge'
+R5AD_12XLARGE = 'r5ad.12xlarge'
+R5AD_24XLARGE = 'r5ad.24xlarge'
 
 P2_XLARGE = 'p2.xlarge'
 P2_8XLARGE = 'p2.8xlarge'
@@ -481,6 +535,17 @@ ELASTICSEARCH_R4_16XLARGE = 'r4.16xlarge.elasticsearch'
 
 ELASTICSEARCH_I2_XLARGE = 'i2.xlarge.elasticsearch'
 ELASTICSEARCH_I2_2XLARGE = 'i2.2xlarge.elasticsearch'
+
+#
+# Kafka brokers instance types
+#
+
+KAFKA_M5_LARGE = 'kafka.m5.large'
+KAFKA_M5_XLARGE = 'kafka.m5.xlarge'
+KAFKA_M5_2XLARGE = 'kafka.m5.2xlarge'
+KAFKA_M5_4XLARGE = 'kafka.m5.4xlarge'
+KAFKA_M5_12XLARGE = 'kafka.m5.12xlarge'
+KAFKA_M5_24XLARGE = 'kafka.m5.24xlarge'
 
 #
 # Parameter types

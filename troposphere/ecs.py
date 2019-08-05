@@ -1,5 +1,7 @@
-from . import AWSObject, AWSProperty
-from .validators import boolean, integer, network_port, positive_integer
+from . import AWSObject, AWSProperty, Tags
+from .validators import (
+    boolean, integer, network_port, positive_integer, ecs_proxy_type
+)
 
 
 LAUNCH_TYPE_EC2 = 'EC2'
@@ -14,6 +16,7 @@ class Cluster(AWSObject):
 
     props = {
         'ClusterName': (basestring, False),
+        'Tags': (Tags, False),
     }
 
 
@@ -109,6 +112,7 @@ class Service(AWSObject):
         'Cluster': (basestring, False),
         'DeploymentConfiguration': (DeploymentConfiguration, False),
         'DesiredCount': (positive_integer, False),
+        'EnableECSManagedTags': (boolean, False),
         'HealthCheckGracePeriodSeconds': (positive_integer, False),
         'LaunchType': (launch_type_validator, False),
         'LoadBalancers': ([LoadBalancer], False),
@@ -117,9 +121,11 @@ class Service(AWSObject):
         'PlacementConstraints': ([PlacementConstraint], False),
         'PlacementStrategies': ([PlacementStrategy], False),
         'PlatformVersion': (basestring, False),
+        'PropagateTags': (basestring, False),
         'SchedulingStrategy': (basestring, False),
         'ServiceName': (basestring, False),
         'ServiceRegistries': ([ServiceRegistry], False),
+        'Tags': (Tags, False),
         'TaskDefinition': (basestring, True),
     }
 
@@ -186,11 +192,21 @@ class KernelCapabilities(AWSProperty):
     }
 
 
+class Tmpfs(AWSProperty):
+    props = {
+        'ContainerPath': (basestring, False),
+        'MountOptions': ([basestring], False),
+        'Size': (integer, False),
+    }
+
+
 class LinuxParameters(AWSProperty):
     props = {
         'Capabilities': (KernelCapabilities, False),
         'Devices': ([Device], False),
         'InitProcessEnabled': (boolean, False),
+        'SharedMemorySize': (integer, False),
+        'Tmpfs': ([Tmpfs], False),
     }
 
 
@@ -207,11 +223,32 @@ class RepositoryCredentials(AWSProperty):
     }
 
 
+class ResourceRequirement(AWSProperty):
+    props = {
+        'Type': (basestring, True),
+        'Value': (basestring, True),
+    }
+
+
+class Secret(AWSProperty):
+    props = {
+        'Name': (basestring, True),
+        'ValueFrom': (basestring, True),
+    }
+
+
 class Ulimit(AWSProperty):
     props = {
         'HardLimit': (integer, True),
-        'Name': (basestring, False),
+        'Name': (basestring, True),
         'SoftLimit': (integer, True),
+    }
+
+
+class ContainerDependency(AWSProperty):
+    props = {
+        'Condition': (basestring, True),
+        'ContainerName': (basestring, True)
     }
 
 
@@ -219,6 +256,7 @@ class ContainerDefinition(AWSProperty):
     props = {
         'Command': ([basestring], False),
         'Cpu': (positive_integer, False),
+        'DependsOn': ([ContainerDependency], False),
         'DisableNetworking': (boolean, False),
         'DnsSearchDomains': ([basestring], False),
         'DnsServers': ([basestring], False),
@@ -230,18 +268,22 @@ class ContainerDefinition(AWSProperty):
         'ExtraHosts': ([HostEntry], False),
         'HealthCheck': (HealthCheck, False),
         'Hostname': (basestring, False),
-        'Image': (basestring, True),
+        'Image': (basestring, False),
         'Links': ([basestring], False),
         'LinuxParameters': (LinuxParameters, False),
         'LogConfiguration': (LogConfiguration, False),
         'Memory': (positive_integer, False),
         'MemoryReservation': (positive_integer, False),
         'MountPoints': ([MountPoint], False),
-        'Name': (basestring, True),
+        'Name': (basestring, False),
         'PortMappings': ([PortMapping], False),
         'Privileged': (boolean, False),
         'ReadonlyRootFilesystem': (boolean, False),
         'RepositoryCredentials': (RepositoryCredentials, False),
+        'ResourceRequirements': ([ResourceRequirement], False),
+        'Secrets': ([Secret], False),
+        'StartTimeout': (integer, False),
+        'StopTimeout': (integer, False),
         'Ulimits': ([Ulimit], False),
         'User': (basestring, False),
         'VolumesFrom': ([VolumesFrom], False),
@@ -273,11 +315,19 @@ class Volume(AWSProperty):
     }
 
 
+class ProxyConfiguration(AWSProperty):
+    props = {
+        'ContainerName': (basestring, True),
+        'ProxyConfigurationProperties': (list, False),
+        'Type': (ecs_proxy_type, False)
+    }
+
+
 class TaskDefinition(AWSObject):
     resource_type = "AWS::ECS::TaskDefinition"
 
     props = {
-        'ContainerDefinitions': ([ContainerDefinition], True),
+        'ContainerDefinitions': ([ContainerDefinition], False),
         'Cpu': (basestring, False),
         'ExecutionRoleArn': (basestring, False),
         'Family': (basestring, False),
@@ -285,6 +335,8 @@ class TaskDefinition(AWSObject):
         'NetworkMode': (basestring, False),
         'PlacementConstraints': ([PlacementConstraint], False),
         'RequiresCompatibilities': ([basestring], False),
+        'Tags': (Tags, False),
         'TaskRoleArn': (basestring, False),
         'Volumes': ([Volume], False),
+        'ProxyConfiguration': (ProxyConfiguration, False)
     }

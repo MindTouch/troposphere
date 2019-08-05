@@ -13,7 +13,7 @@ import types
 
 from . import validators
 
-__version__ = "2.4.6"
+__version__ = "2.5.0"
 
 # constants for DeletionPolicy and UpdateReplacePolicy
 Delete = 'Delete'
@@ -525,24 +525,32 @@ class ImportValue(AWSHelperFn):
         self.data = {'Fn::ImportValue': data}
 
 
+class Tag(AWSHelperFn):
+    def __init__(self, k, v):
+        self.data = {'Key': k, 'Value': v, }
+
+
 class Tags(AWSHelperFn):
     def __init__(self, *args, **kwargs):
+        self.tags = []
         if not args:
             # Assume kwargs variant
             tag_dict = kwargs
         else:
-            if len(args) != 1:
-                raise(TypeError, "Multiple non-kwargs passed to Tags")
-
-            # Validate single argument passed in is a dict
-            if not isinstance(args[0], dict):
-                raise(TypeError, "Tags needs to be either kwargs or dict")
-            tag_dict = args[0]
+            tag_dict = {}
+            for arg in args:
+                # Validate argument passed in is an AWSHelperFn or...
+                if isinstance(arg, AWSHelperFn):
+                    self.tags.append(arg)
+                # Validate argument passed in is a dict
+                elif isinstance(arg, dict):
+                    tag_dict.update(arg)
+                else:
+                    raise(TypeError, "Tags needs to be either kwargs, "
+                                     "dict, or AWSHelperFn")
 
         def add_tag(tag_list, k, v):
             tag_list.append({'Key': k, 'Value': v, })
-
-        self.tags = []
 
         # Detect and handle non-string Tag items which do not sort in Python3
         if all(isinstance(k, basestring) for k in tag_dict):
@@ -574,6 +582,7 @@ class Template(object):
         'Mappings': (dict, False),
         'Resources': (dict, False),
         'Outputs': (dict, False),
+        'Rules': (dict, False),
     }
 
     def __init__(self, Description=None, Metadata=None):  # noqa: N803
@@ -584,6 +593,7 @@ class Template(object):
         self.outputs = {}
         self.parameters = {}
         self.resources = {}
+        self.rules = {}
         self.version = None
         self.transform = None
 
@@ -658,6 +668,21 @@ class Template(object):
                              % MAX_RESOURCES)
         return self._update(self.resources, resource)
 
+    def add_rule(self, name, rule):
+        """
+        Add a Rule to the template to enforce extra constraints on the
+        parameters. As of June 2019 rules are undocumented in CloudFormation
+        but have the same syntax and behaviour as in ServiceCatalog:
+        https://docs.aws.amazon.com/servicecatalog/latest/adminguide/reference-template_constraint_rules.html
+
+        :param rule: a dict with 'Assertions' (mandatory) and 'RuleCondition'
+                     (optional) keys
+        """
+        # TODO: check maximum number of Rules, and enforce limit.
+        if name in self.rules:
+            self.handle_duplicate_key(name)
+        self.rules[name] = rule
+
     def set_version(self, version=None):
         if version:
             self.version = version
@@ -703,6 +728,8 @@ class Template(object):
             t['AWSTemplateFormatVersion'] = self.version
         if self.transform:
             t['Transform'] = self.transform
+        if self.rules:
+            t['Rules'] = self.rules
         t['Resources'] = self.resources
 
         return encode_to_dict(t)

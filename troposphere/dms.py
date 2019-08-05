@@ -75,7 +75,7 @@ class Endpoint(AWSObject):
         'ServerName': (basestring, False),
         'SslMode': (basestring, False),
         'Tags': (Tags, False),
-        'Username': (basestring, True),
+        'Username': (basestring, False),
     }
 
 
@@ -98,6 +98,7 @@ class ReplicationInstance(AWSObject):
 
     props = {
         'AllocatedStorage': (integer, False),
+        'AllowMajorVersionUpgrade': (boolean, False),
         'AutoMinorVersionUpgrade': (boolean, False),
         'AvailabilityZone': (basestring, False),
         'EngineVersion': (basestring, False),

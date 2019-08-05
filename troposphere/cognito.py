@@ -105,6 +105,7 @@ class DeviceConfiguration(AWSProperty):
 
 class EmailConfiguration(AWSProperty):
     props = {
+        'EmailSendingAccount': (basestring, False),
         'ReplyToEmailAddress': (basestring, False),
         'SourceArn': (basestring, False),
     }
@@ -130,6 +131,7 @@ class PasswordPolicy(AWSProperty):
         'RequireNumbers': (boolean, False),
         'RequireSymbols': (boolean, False),
         'RequireUppercase': (boolean, False),
+        'TemporaryPasswordValidityDays': (positive_integer, False),
     }
 
 
